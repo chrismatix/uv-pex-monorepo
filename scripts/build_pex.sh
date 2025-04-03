@@ -11,6 +11,13 @@ fi
 # Navigate to the specified package path
 PACKAGE_PATH="$1"
 
+DIST_DIR="$PACKAGE_PATH"/dist
+
+# If we don't clear the target bin pex will keep
+# adding to the old archive!
+rm -r "$DIST_DIR" || echo "no dist dir found. creating"
+echo "Cleared dist directory $DIST_DIR"
+
 if [ -d "$PACKAGE_PATH" ]; then
   cd "$PACKAGE_PATH" || { echo "Failed to cd into $PACKAGE_PATH"; exit 1; }
 else
@@ -18,12 +25,6 @@ else
   exit 1
 fi
 
-DIST_DIR="$PACKAGE_PATH"/dist
-
-# If we don't clear the target bin pex will keep
-# adding to the old archive!
-rm -r "$DIST_DIR"
-echo "Cleared dist directory $DIST_DIR"
 
 
 echo "Building the pex file for $PACKAGE_PATH"
@@ -41,6 +42,7 @@ uvx pex \
 -r dist/requirements.txt \
 -o dist/bin.pex \
 -e main \
+--no-transitive \
 --python-shebang '#!/usr/bin/env python3' \
 --sources-dir=. \
 --scie eager \

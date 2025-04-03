@@ -1,6 +1,6 @@
 #!/bin/bash
 
-members=$(uv run python -c 'import tomli; print("\n".join(tomli.load(open("pyproject.toml", "rb"))["tool"]["uv"]["workspace"]["members"]))')
+members=$(uv run python ./scripts/get_workspaces.py)
 
 echo $members
 
