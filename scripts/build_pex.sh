@@ -44,9 +44,7 @@ uvx pex \
 -e main \
 --no-transitive \
 --python-shebang '#!/usr/bin/env python3' \
---sources-dir=. \
---scie eager \
---scie-pbs-stripped
+--sources-dir=.
 
 chmod +x dist/bin
 

@@ -20,11 +20,12 @@ cd server
 
 time pex -v --include-tools \
  -e main \
+ --layout=packed \
  --sources-dir=. \
  --venv-repository /tmp/native.venv/ \
  --venv-repository /tmp/foreign.venv/ \
  -o test.pex
-docker build --platform=linux/amd64 -t test-server-amd64 .
+# docker build --platform=linux/amd64 -t test-server-amd64 .
 
 # docker build -t test-server-aarch64 .
 
