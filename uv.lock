@@ -48,7 +48,6 @@ name = "cli"
 version = "0.1.0"
 source = { virtual = "cli" }
 dependencies = [
-    { name = "demo-proto" },
     { name = "format" },
     { name = "rich" },
     { name = "typer" },
@@ -56,7 +55,6 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "demo-proto", editable = "lib/proto" },
     { name = "format", editable = "lib/format" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "typer", specifier = ">=0.15.2" },
@@ -377,6 +375,7 @@ name = "server"
 version = "0.1.0"
 source = { virtual = "server" }
 dependencies = [
+    { name = "demo-proto" },
     { name = "fastapi" },
     { name = "format" },
     { name = "httpx" },
@@ -385,6 +384,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "demo-proto", editable = "lib/proto" },
     { name = "fastapi", specifier = "==0.115.11" },
     { name = "format", editable = "lib/format" },
     { name = "httpx", specifier = "==0.28.1" },

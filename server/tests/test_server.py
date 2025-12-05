@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
-from server.main import app
+from pb import sarcasm_pb2 as demo_pb2
+from server.app import app
 
 client = TestClient(app)
 
@@ -17,14 +18,17 @@ def test_get_sarcastic_text():
     assert "original" in data
     assert "sarcastic" in data
 
+    # Ensure payload aligns with our protobuf contract
+    message = demo_pb2.SarcasticResponse(**data)
+
     # Check if original text is preserved
-    assert data["original"] == test_text
+    assert message.original == test_text
 
     # Check if sarcastic version is different from original
     # and contains alternating case (a basic check)
-    assert data["sarcastic"] != test_text
-    assert any(c.isupper() for c in data["sarcastic"])
-    assert any(c.islower() for c in data["sarcastic"])
+    assert message.sarcastic != test_text
+    assert any(c.isupper() for c in message.sarcastic)
+    assert any(c.islower() for c in message.sarcastic)
 
 
 def test_get_sarcastic_text_empty():

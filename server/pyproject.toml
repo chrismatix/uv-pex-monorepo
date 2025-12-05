@@ -8,10 +8,12 @@ dependencies = [
     "format",
     "httpx==0.28.1",
     "uvicorn==0.34.0",
+    "demo-proto",
 ]
 
 [tool.uv.sources]
 format = { workspace = true }
+demo-proto = { workspace = true }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

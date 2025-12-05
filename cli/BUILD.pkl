@@ -23,16 +23,4 @@ targets {
       ...deps
     }
   }.targets
-
-  new {
-    name = "test"
-    command = "uv run pytest"
-    inputs {
-      ...sources
-      "tests/*.py"
-    }
-    dependencies {
-      ...deps
-    }
-  }
 }
