@@ -3,11 +3,11 @@ name = "cli"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
 dependencies = [
     "format",
     "rich>=13.9.4",
     "typer>=0.15.2",
+    "demo-proto",
 ]
 
 [project.scripts]
@@ -15,6 +15,7 @@ main = "cli:app"
 
 [tool.uv.sources]
 format = { workspace = true }
+demo-proto = { workspace = true }
 
 [dependency-groups]
 dev = []

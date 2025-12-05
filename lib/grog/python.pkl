@@ -1,0 +1,83 @@
+module python
+
+import "@grog/package.pkl"
+import "pex.pkl"
+
+const local is_mac = read("env:GROG_OS") == "darwin"
+
+const local arch_to_py_platform = new Mapping {
+  ["arm64"] = "aarch64-unknown-linux-gnu"
+  ["amd64"] = "linux"
+}
+
+class PythonPexImage {
+  local self = this
+
+  // This should match the package name in the pyproject.toml
+  name: String
+  // os and arch for the prod distribution
+  // used to declare what platforms should build this target
+  // i.e. we don't want arm64 runners building amd64 images
+  deploy_arch: String
+
+  pex_args: pex.PexCommandArgs?
+
+  // For some strange reason pex merges the incoming args with the defaults
+  final_pex_args = pex_args ?? new pex.PexCommandArgs {
+    // By default the entry point should be package.main
+    entry_point = "\(self.name).main"
+  }
+
+  // optional tags to supply
+  tags: Listing<String> = new Listing<String> {}
+
+  // Sources that should trigger the python app to rebuild
+  app_sources: Listing<String>
+  app_dependencies: Listing<String>?
+
+  // Sources that only affect the deployment target
+  deploy_sources: Listing<String>?
+
+  // Sources that should trigger the tests to re-run
+  // (app sources will be added automatically)
+  // test_sources: Listing<String>
+
+  // The targets contain two sets of the same targets, one for the
+  // target runner and one for running on MacOS
+  fixed targets: Listing<package.Target> = new Listing<package.Target> {
+
+    ...new pex.Build {
+      package_name = self.name
+      pex_args = self.final_pex_args
+      python_platform = arch_to_py_platform[deploy_arch]
+      sources = app_sources
+      dependencies = app_dependencies
+    }.targets
+
+    new {
+      name = "image"
+      command = "docker build --platform=linux/\(deploy_arch) -t \(self.name) ."
+      dependencies {
+        ":pex"
+      }
+      inputs {
+        "Dockerfile"
+      }
+      outputs {
+        "docker::\(self.name)"
+      }
+      platforms {
+        when (!is_mac) {
+          // Mac can build on all archs
+          // but for ci runners select according to arch
+          "linux/\(deploy_arch)"
+        }
+      }
+
+      tags {
+        ...self.tags
+      }
+    }
+
+  }
+}

@@ -10,4 +10,4 @@ FROM python:3.12-slim
 # Copy the app from the builder stage
 COPY --from=builder /app /app
 
-ENTRYPOINT ["/app/pex"]
+ENTRYPOINT ["/app/pex"]1

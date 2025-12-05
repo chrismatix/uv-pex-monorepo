@@ -1,14 +1,14 @@
 import random
 import emoji
 
+# Random sarcastic emojis
+sarcastic_emojis = [
+    ":rolling_eyes:", ":unamused:", ":upside_down_face:",
+    ":smirk:", ":nail_care:", ":face_with_raised_eyebrow:"
+]
 
 def make_sarcastic(text: str) -> str:
     """Convert text to sArCaStIc format with extra sass."""
-    # Random sarcastic emojis
-    sarcastic_emojis = [
-        ":rolling_eyes:", ":unamused:", ":upside_down_face:",
-        ":smirk:", ":nail_care:", ":face_with_raised_eyebrow:"
-    ]
 
     # Convert text to random case
     sarcastic_text = ''.join(

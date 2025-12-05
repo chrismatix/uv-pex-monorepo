@@ -1,0 +1,38 @@
+amends "@grog/package.pkl"
+
+import ".../lib/grog/python.pkl"
+
+local sources = List(
+  "server/**/*.py",
+  "pyproject.toml"
+)
+
+local deps = List(
+  "//lib/format"
+)
+
+targets {
+  ...new python.PythonPexImage {
+    deploy_arch = "amd64"
+    name = "cli"
+
+    app_sources {
+      ...sources
+    }
+    app_dependencies {
+      ...deps
+    }
+  }.targets
+
+  new {
+    name = "test"
+    command = "uv run pytest"
+    inputs {
+      ...sources
+      "tests/*.py"
+    }
+    dependencies {
+      ...deps
+    }
+  }
+}
