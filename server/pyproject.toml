@@ -17,3 +17,8 @@ demo-proto = { workspace = true }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+]

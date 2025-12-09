@@ -138,8 +138,16 @@ dependencies = [
     { name = "emoji" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
 [package.metadata]
 requires-dist = [{ name = "emoji", specifier = ">=2.14.1" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3.5" }]
 
 [[package]]
 name = "grpcio"
@@ -382,6 +390,11 @@ dependencies = [
     { name = "uvicorn" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "demo-proto", editable = "lib/proto" },
@@ -390,6 +403,9 @@ requires-dist = [
     { name = "httpx", specifier = "==0.28.1" },
     { name = "uvicorn", specifier = "==0.34.0" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3.5" }]
 
 [[package]]
 name = "setuptools"
