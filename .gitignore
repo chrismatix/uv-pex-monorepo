@@ -8,3 +8,9 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Pants working files
+.pants.d/
+pants/.pants.d/
+pants/pants.log
+pants/.pants.bootstrap

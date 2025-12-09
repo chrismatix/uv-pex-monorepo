@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [project.scripts]
-main = "cli:app"
+main = "cli.main:app"
 
 [tool.uv.sources]
 format = { workspace = true }

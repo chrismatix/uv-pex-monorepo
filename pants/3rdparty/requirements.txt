@@ -1,0 +1,11 @@
+emoji==2.14.1
+fastapi==0.115.11
+grpcio==1.76.0
+grpcio-tools==1.76.0
+httpx==0.28.1
+protobuf==6.33.1
+pytest==8.3.5
+rich==13.9.4
+tomli==2.2.1
+typer==0.15.2
+uvicorn==0.34.0

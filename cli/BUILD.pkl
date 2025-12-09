@@ -3,7 +3,7 @@ amends "@grog/package.pkl"
 import ".../lib/grog/python.pkl"
 
 local sources = List(
-  "server/**/*.py",
+  "cli/**/*.py",
   "pyproject.toml"
 )
 
