@@ -8,7 +8,8 @@ local sources = List(
 )
 
 local deps = List(
-  "//lib/format"
+  "//lib/format",
+  "//lib/proto"
 )
 
 targets {
