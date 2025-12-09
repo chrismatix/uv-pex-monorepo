@@ -1,0 +1,113 @@
+module pex
+
+import "@grog/package.pkl"
+
+class PexCommandArgs {
+  // Args to concatenate for pex
+  // Run uvx pex --help for more information
+  // Regular python module entrypoint
+  entry_point: String?
+  // Package console script entrypoint (e.g. uvicorn)
+  console_script: String?
+  // args to pass to uvicorn
+  inject_args: String?
+
+  // Concatenate the args conditionally
+  pex_args: String = new Listing<String> {
+    when(entry_point != null) {
+      "--entry-point=\(entry_point)"
+    }
+    when (console_script != null) {
+      "--console-script=\(console_script)"
+    }
+    when (inject_args != null) {
+      "--inject-args=\"\(inject_args)\""
+    }
+  }.toList().join(" ")
+}
+
+class Build {
+  // TODO read this from the toml directly
+  package_name: String
+  sources: Listing<String>
+  // target platform
+  // e.g. x86_64-manylinux2014 or aarch64-unknown-linux-gnu
+  python_platform: String
+
+  // args to pass to pex command
+  pex_args: PexCommandArgs
+
+  dependencies: Listing<String>?
+
+  // optional tags to supply
+  tags: Listing<String> = new Listing<String> {}
+
+  local self = this
+
+  fixed targets: Listing<package.Target> = new Listing<package.Target> {
+    new {
+      name = "pylock"
+      command = "uv pip compile pyproject.toml --python-platform=\(python_platform) -q --format pylock.toml -o build/pylock.toml"
+      dependencies {
+        "//:uv.lock"
+      }
+      outputs {
+        "build/pylock.toml"
+      }
+      inputs {
+        "pyproject.toml"
+      }
+      tags = self.tags
+    }
+
+    // pointing to a pre-built whl saves about 1 second
+    // https://github.com/pex-tool/pex/discussions/2979#discussioncomment-14893812
+    new {
+      name = "package"
+      command = """
+        uv build --wheel --out-dir ./build
+        """
+      inputs {
+        ...sources
+      }
+      outputs {
+        "build/\(package_name)-0.1.0-py3-none-any.whl"
+      }
+      tags = self.tags
+    }
+
+    new {
+      name = "pex"
+      command = """
+        uv venv --clear build/install.venv
+
+        uv pip install -q --python-platform=\(python_platform) --python build/install.venv -r build/pylock.toml
+
+        uv --color=never -q pip list --offline --strict --python build/install.venv --format freeze > build/requirements.all.txt
+
+        uvx pex==2.69.1 -v --include-tools \\
+          \(self.pex_args.pex_args) \\
+          --layout=packed \\
+          --project=build/\(package_name)-0.1.0-py3-none-any.whl \\
+          --pip-version latest-compatible \\
+          --pre \\
+          --requirements=build/requirements.all.txt \\
+          --venv-repository build/install.venv/ \\
+          --max-install-jobs=-1 \\
+          -o dist/bin.pex
+        """
+      outputs {
+        "dir::dist/bin.pex"
+      }
+      inputs {
+        ...sources
+      }
+      dependencies {
+        ":package"
+        ":pylock"
+        ...(self.dependencies ?? List())
+      }
+      tags = self.tags
+    }
+  }
+}

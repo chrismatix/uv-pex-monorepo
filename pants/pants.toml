@@ -1,0 +1,27 @@
+[GLOBAL]
+pants_version = "2.29.0"
+backend_packages = [
+  "pants.backend.python",
+  "pants.backend.codegen.protobuf.python",
+  "pants.backend.docker",
+]
+
+[source]
+root_patterns = [
+  "lib/proto",
+  "lib/format",
+  "server",
+  "cli",
+]
+
+[python]
+interpreter_constraints = ["==3.12.*"]
+enable_resolves = false
+
+[docker]
+use_buildx = true
+
+# Expose the credential helper
+tools = [
+    "docker-credential-osxkeychain",
+]

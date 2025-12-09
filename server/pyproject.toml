@@ -3,17 +3,17 @@ name = "server"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
 dependencies = [
-    "fastapi>=0.115.11",
+    "fastapi==0.115.11",
     "format",
-    "httpx>=0.28.1",
-    "uvicorn>=0.34.0",
+    "httpx==0.28.1",
+    "uvicorn==0.34.0",
+    "demo-proto",
 ]
 
 [tool.uv.sources]
 format = { workspace = true }
-
+demo-proto = { workspace = true }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

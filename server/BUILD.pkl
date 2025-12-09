@@ -1,0 +1,43 @@
+amends "@grog/package.pkl"
+
+import ".../lib/grog/python.pkl"
+
+local sources = List(
+  "server/**/*.py",
+  "pyproject.toml"
+)
+
+local deps = List(
+  "//lib/format"
+)
+
+targets {
+  ...new python.PythonPexImage {
+    deploy_arch = "amd64"
+    name = "server"
+
+    pex_args {
+      console_script = "uvicorn"
+      inject_args = "server.main:app --host 0.0.0.0 --port 8080 --log-level warning --workers 3"
+    }
+
+    app_sources {
+      ...sources
+    }
+    app_dependencies {
+      ...deps
+    }
+  }.targets
+
+  new {
+    name = "test"
+    command = "uv run pytest"
+    inputs {
+      ...sources
+      "tests/*.py"
+    }
+    dependencies {
+      ...deps
+    }
+  }
+}
