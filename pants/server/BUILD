@@ -37,11 +37,7 @@ pex_binary(
   output_path="server.pex",
   dependencies=[":lib", "3rdparty:reqs#uvicorn"],
 )
-#
-# docker_image(
-#   name="server_image",
-#   source="Dockerfile",
-#   dependencies=[":server_bin"],
-#   tags=["latest"],
-# )
 
+docker_image(
+    name="docker",
+)
