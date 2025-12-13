@@ -16,11 +16,9 @@ measure() {
     echo "Command: $*"
 
     # Construct the command string that includes redirection to null
-    local command_to_run_silently="$* >/dev/null 2>&1"
-    # Execute this silent command using 'bash -c' and time it.
-    # The timing output from /usr/bin/time will now be visible,
-    # while the command's own output is suppressed.
-    /usr/bin/time -h bash -c "${command_to_run_silently}"
+    # Use this command instead when you want to discard the output
+    # local command_to_run_silently="$* >/dev/null 2>&1"
+    /usr/bin/time -h bash -c "$*"
 }
 
 log_header "Starting Benchmark: Pants vs Grog"
