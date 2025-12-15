@@ -1,4 +1,4 @@
-# Python mono-repo using UV, Pex, and Earthly
+# Python mono-repo using UV, Pex, and Grog
 
 ![build](https://github.com/chrismatix/uv-pex-monorepo/actions/workflows/release.yaml/badge.svg)
 
